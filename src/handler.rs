@@ -3,17 +3,14 @@ use crate::{
     store::{Status, Todo, TodoStore},
 };
 
-pub struct CmdHandler {
+pub struct CmdHandler<'a> {
     pub cmd: SubCommand,
-    pub store: TodoStore,
+    pub store: &'a mut TodoStore,
 }
 
-impl CmdHandler {
-    pub fn new(cmd: SubCommand) -> Self {
-        Self {
-            cmd,
-            store: TodoStore::new(1000),
-        }
+impl<'a> CmdHandler<'a> {
+    pub fn new(cmd: SubCommand, store: &'a mut TodoStore) -> Self {
+        Self { cmd, store }
     }
 
     pub fn handle(&mut self) -> Result<Option<Todo>, String> {
